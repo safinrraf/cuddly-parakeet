@@ -1,0 +1,123 @@
+# Specify required providers
+terraform {
+  required_providers {
+    snowflake = {
+      source  = "Snowflake-Labs/snowflake"
+      version = "~> 0.44.0"
+    }
+  }
+}
+
+# Snowflake provider configuration
+provider "snowflake" {
+  username = var.snowflake_user_name
+  password = var.snowflake_user_password
+  account  = var.snowflake_account # e.g., "xy12345.us-east-1"
+  role     = "ACCOUNTADMIN"        # Role with sufficient privileges
+  region   = var.snowflake_region  # e.g., "us-east-1"
+}
+
+# Create a new Snowflake database
+resource "snowflake_database" "example_db" {
+  name         = "MY_NEW_DATABASE"
+  is_transient = false
+  comment      = "Database for storing application data"
+}
+
+# Create a new Snowflake warehouse
+resource "snowflake_warehouse" "example_warehouse" {
+  name                = "MY_WAREHOUSE"
+  warehouse_size      = "XSMALL" # Adjust size based on workload
+  auto_suspend        = 60       # Suspend after 1 minute of inactivity
+  auto_resume         = true
+  initially_suspended = true # Start in suspended mode
+  comment             = "Warehouse for MY_NEW_DATABASE"
+}
+
+# Create 5 tables in the new database
+resource "snowflake_schema" "example_schema" {
+  name     = "PUBLIC" # Using the default PUBLIC schema
+  database = snowflake_database.example_db.name
+}
+
+resource "snowflake_table" "table1" {
+  name     = "TABLE_1"
+  database = snowflake_database.example_db.name
+  schema   = snowflake_schema.example_schema.name
+  column {
+    name = "id"
+    type = "INTEGER"
+  }
+  column {
+    name = "name"
+    type = "STRING"
+  }
+  column {
+    name = "created_at"
+    type = "TIMESTAMP_NTZ"
+  }
+}
+
+resource "snowflake_table" "table2" {
+  name     = "TABLE_2"
+  database = snowflake_database.example_db.name
+  schema   = snowflake_schema.example_schema.name
+  column {
+    name = "id"
+    type = "INTEGER"
+  }
+  column {
+    name = "description"
+    type = "STRING"
+  }
+  column {
+    name = "updated_at"
+    type = "TIMESTAMP_NTZ"
+  }
+}
+
+resource "snowflake_table" "table3" {
+  name     = "TABLE_3"
+  database = snowflake_database.example_db.name
+  schema   = snowflake_schema.example_schema.name
+  column {
+    name = "state"
+    type = "STRING"
+  }
+  column {
+    name = "color"
+    type = "STRING"
+  }
+  column {
+    name = "count"
+    type = "INTEGER"
+  }
+}
+
+resource "snowflake_table" "table4" {
+  name     = "TABLE_4"
+  database = snowflake_database.example_db.name
+  schema   = snowflake_schema.example_schema.name
+  column {
+    name = "user_id"
+    type = "INTEGER"
+  }
+  column {
+    name = "email"
+    type = "STRING"
+  }
+}
+
+resource "snowflake_table" "table5" {
+  name     = "TABLE_5"
+  database = snowflake_database.example_db.name
+  schema   = snowflake_schema.example_schema.name
+  column {
+    name = "product_id"
+    type = "INTEGER"
+  }
+  column {
+    name = "price"
+    type = "FLOAT"
+  }
+}

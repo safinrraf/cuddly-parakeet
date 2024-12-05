@@ -1,0 +1,4 @@
+variable "snowflake_user_name" {}
+variable "snowflake_user_password" {}
+variable "snowflake_organization_name" {}
+variable "snowflake_account_name" {}

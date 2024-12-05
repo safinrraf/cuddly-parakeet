@@ -42,3 +42,14 @@ bash/env.sh
 .env
 .DS_Store
 bash/docker_password.pswd
+
+.ropeproject
+keys/
+bigtable-snowflake-integration/**/keys/
+bigtable-snowflake-integration/**/.terraform/
+bigtable-snowflake-integration/**/.terraform.*
+bigtable-snowflake-integration/**/terraform.*
+
+*.terraform*
+*.tfstate
+*.tfstate.*
