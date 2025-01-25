@@ -1,8 +1,0 @@
-{
-	"/echo":{
-		"target":"{LOOKER_INSTANCE_ID}",
-		"secure":true,
-		"changeOrigin":true,
-		"logLevel":"debug"
-	}
-}

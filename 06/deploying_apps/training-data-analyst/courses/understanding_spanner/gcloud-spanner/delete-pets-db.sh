@@ -1,1 +1,0 @@
-gcloud spanner databases delete pets-db --instance=test-spanner-instance 

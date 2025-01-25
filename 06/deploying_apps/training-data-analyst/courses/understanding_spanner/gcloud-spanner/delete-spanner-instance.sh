@@ -1,1 +1,0 @@
-gcloud spanner instances delete test-spanner-instance --quiet
