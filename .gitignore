@@ -50,6 +50,10 @@ bigtable-snowflake-integration/**/.terraform/
 bigtable-snowflake-integration/**/.terraform.*
 bigtable-snowflake-integration/**/terraform.*
 
+snowflake/**/keys/
+
 *.terraform*
 *.tfstate
 *.tfstate.*
+
+*.password
