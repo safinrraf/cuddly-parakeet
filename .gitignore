@@ -51,6 +51,7 @@ bigtable-snowflake-integration/**/.terraform.*
 bigtable-snowflake-integration/**/terraform.*
 
 snowflake/**/keys/
+snowflake/**/test_data/
 
 *.terraform*
 *.tfstate
