@@ -1,5 +1,5 @@
-REGION=us-east1
-ZONE=us-east1-d
+REGION=us-central1
+ZONE=us-central1-c
 VPC_NETWORK_DEV=griffin-dev-vpc
 VPC_NETWORK_PROD=griffin-prod-vpc
 VPC_NETWORK_DEV_FIREWALL_TCP_UDP_ICMP=griffin-dev-vpc-firewall-tcp-udp-icmp
@@ -7,7 +7,6 @@ VPC_NETWORK_DEV_FIREWALL_TCP22_TCP3389=griffin-dev-vpc-firewall-tcp22-tcp3389
 VPC_NETWORK_PROD_FIREWALL_TCP_UDP_ICMP=griffin-prod-vpc-firewall-tcp-udp-icmp
 VPC_NETWORK_PROD_FIREWALL_TCP22_TCP3389=griffin-prod-vpc-firewall-tcp22-tcp3389
 BASTION_INSTANCE_NAME=griffin-bastion-host
-
 
 gcloud config set compute/region $REGION
 gcloud config set compute/zone $ZONE
@@ -75,14 +74,45 @@ gcloud compute instances create $BASTION_INSTANCE_NAME \
 
 gcloud sql connect griffin-dev-db --user=root --quiet
 
+'
+CREATE DATABASE wordpress;
+CREATE USER "wp_user"@"%" IDENTIFIED BY "stormwind_rules";
+GRANT ALL PRIVILEGES ON wordpress.* TO "wp_user"@"%";
+FLUSH PRIVILEGES;
+'
+
 #Task 5. Create Kubernetes cluster
 gcloud container clusters create griffin-dev \
     --num-nodes=2 \
     --machine-type=e2-standard-4 \
     --zone=$ZONE \
-    --network=griffin-dev-vpc \
+    --network=$VPC_NETWORK_DEV\
     --subnetwork=griffin-dev-wp
 
 #Task 6. Prepare the Kubernetes cluster
-mkdir wp-k8s
 gsutil -m cp -r gs://cloud-training/gsp321/wp-k8s .
+
+#Create a key for the service account
+gcloud iam service-accounts keys create key.json \
+    --iam-account=cloud-sql-proxy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+
+kubectl create secret generic cloudsql-instance-credentials \
+    --from-file key.json
+
+#Creating a PV and a PVC backed by Persistent Disk
+#In Cloud Shell, deploy the manifest file
+kubectl apply -f wp-env.yaml
+#You can verify that the PersistentVolume was created by running the following command:
+kubectl get persistentvolumeclaim
+
+
+#Task 7. Create a WordPress deployment
+#create your deployment object using kubectl create -f wp-deployment.yaml
+kubectl create -f wp-deployment.yaml
+#Once you have created the deployment, you can verify that it was created:
+kubectl get deployments
+kubectl describe pod wordpress-----
+#Once the deployment is created, Kubernetes will create a ReplicaSet for the deployment. You can verify that a ReplicaSet was created for the deployment
+kubectl get replicasets
+#After you create your WordPress deployment, create the service with 
+kubectl create -f wp-service.yaml
