@@ -8,7 +8,6 @@ terraform {
 }
 
 provider "google" {
-
   project = "qwiklabs-gcp-00-433068d34ea8"
   region  = "europe-west1"
   zone    = "europe-west1-c"
