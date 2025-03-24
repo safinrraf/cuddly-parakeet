@@ -2,14 +2,14 @@
 
 # Task 1. Create the configuration files
 
-export REGION=us-east1
-export ZONE=us-east1-d
-export PROJECT_ID=qwiklabs-gcp-00-6a15b1d791c9
+export REGION=
+export ZONE=
+export PROJECT_ID=
 
-REGION=us-east1
-ZONE=us-east1-d
-PROJECT_ID=qwiklabs-gcp-00-6a15b1d791c9
-STORAGE_BUCKET=tf-bucket-804308
+REGION=
+ZONE=
+PROJECT_ID=
+STORAGE_BUCKET=
 
 touch main.tf
 cat <<EOF > main.tf
@@ -17,7 +17,6 @@ terraform {
   required_providers {
     google = {
       source = "hashicorp/google"
-      version = "3.5.0"
     }
   }
 }
@@ -112,3 +111,5 @@ terraform import module.instances.google_compute_instance.tf-instance-1 $PROJECT
 terraform import module.instances.google_compute_instance.tf-instance-2 $PROJECT_ID/$ZONE/tf-instance-2
 
 terraform show -no-color > modules/instances/instances.tf
+
+terraform init -upgrade

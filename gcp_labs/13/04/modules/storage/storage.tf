@@ -1,4 +1,4 @@
-resource "google_storage_bucket" "tf-bucket-804308" {
+resource "google_storage_bucket" "storage-bucket" {
   name               = var.bucket-name
   project            = var.project_id
   location           = "US"
