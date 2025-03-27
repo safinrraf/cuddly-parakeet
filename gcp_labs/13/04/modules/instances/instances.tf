@@ -1,6 +1,6 @@
 # module.instances.google_compute_instance.tf-instance-1:
 resource "google_compute_instance" "tf-instance-1" {
-    machine_type            = "e2-micro"
+    machine_type            = var.machine_type
     name                    = "tf-instance-1"
     project                 = var.project_id
     zone                    = var.zone
@@ -10,15 +10,17 @@ resource "google_compute_instance" "tf-instance-1" {
         mode        = "READ_WRITE"
 
         initialize_params {
-            image  = "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-11-bullseye-v20250311"
-            labels = {}
-            size   = 10
-            type   = "pd-standard"
+            image  = var.machine_image
         }
     }
 
     network_interface {
-        network            = "default"
+        network            = var.machine_network
+        #subnetwork         = "subnet-01"
+
+        access_config {
+        // Ephemeral public IP
+        }
     }
 
     metadata_startup_script = <<-EOT
@@ -29,7 +31,7 @@ resource "google_compute_instance" "tf-instance-1" {
 
 # module.instances.google_compute_instance.tf-instance-2:
 resource "google_compute_instance" "tf-instance-2" {
-    machine_type            = "e2-micro"
+    machine_type            = var.machine_type
     name                    = "tf-instance-2"
     project                 = var.project_id
     zone                    = var.zone
@@ -39,16 +41,44 @@ resource "google_compute_instance" "tf-instance-2" {
         mode        = "READ_WRITE"
 
         initialize_params {
-            image  = "https://www.googleapis.com/compute/v1/projects/debian-cloud/global/images/debian-11-bullseye-v20250311"
-            labels = {}
-            size   = 10
-            type   = "pd-standard"
+            image  = var.machine_image
         }
     }
 
     network_interface {
-        network            = "default"
+        network            = var.machine_network
+        #subnetwork         = "subnet-02"
+
+        access_config {
+        // Ephemeral public IP
+        }
     }
+
+    metadata_startup_script = <<-EOT
+        #!/bin/bash
+    EOT
+    allow_stopping_for_update = true
+}
+
+
+resource "google_compute_instance" "tf-instance-292823" {
+  name         = "tf-instance-292823"
+  machine_type = var.machine_type
+  zone         = var.zone
+
+  boot_disk {
+    initialize_params {
+      image = var.machine_image
+    }
+  }
+
+  network_interface {
+    network = var.machine_network
+
+    access_config {
+      // Ephemeral public IP
+    }
+  }
 
     metadata_startup_script = <<-EOT
         #!/bin/bash

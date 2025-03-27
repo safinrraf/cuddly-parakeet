@@ -6,10 +6,10 @@ export REGION=
 export ZONE=
 export PROJECT_ID=
 
-REGION=
-ZONE=
-PROJECT_ID=
-STORAGE_BUCKET=
+REGION=us-east1
+ZONE=us-east1-c
+PROJECT_ID=qwiklabs-gcp-00-913f83deb7ea
+STORAGE_BUCKET=tf-bucket-946895
 
 touch main.tf
 cat <<EOF > main.tf
